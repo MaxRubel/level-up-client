@@ -1,4 +1,7 @@
-const endpoint = 'http://localhost:8000';
+import { clientCredentials } from './client';
+
+const endpoint = clientCredentials.databaseURL;
+
 const getEvents = () => new Promise((resolve, reject) => {
   fetch(`${endpoint}/events`)
     .then((response) => response.json())
