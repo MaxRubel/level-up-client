@@ -22,6 +22,32 @@ const createEvent = (payload) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const leaveEvent = (eventId, payload) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/events/${eventId}/leave`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => response.json())
+    .then((data) => resolve(data))
+    .catch(reject);
+});
+
+const eventSignUp = (eventId, payload) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/events/${eventId}/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => response.json())
+    .then((data) => resolve(data))
+    .catch(reject);
+});
+
 const getSingleEvent = (id) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/events/${id}`, {
     method: 'GET',
@@ -58,5 +84,11 @@ const deleteEvent = (id) => new Promise((resolve, reject) => {
 });
 
 export {
-  getEvents, createEvent, getSingleEvent, updateEvent, deleteEvent,
+  getEvents,
+  createEvent,
+  getSingleEvent,
+  updateEvent,
+  deleteEvent,
+  eventSignUp,
+  leaveEvent,
 };
