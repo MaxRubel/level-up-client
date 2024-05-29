@@ -3,17 +3,19 @@ import { Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { getEvents } from '../../utils/eventData';
 import EventCard from '../../components/game/EventCard';
+import { useAuth } from '../../utils/context/authContext';
 
 function Home() {
   const [events, setEvents] = useState([]);
   const [update, setUpdate] = useState(0);
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
-    getEvents().then((data) => {
+    getEvents(user.uid).then((data) => {
       setEvents(data);
     });
-  }, [update]);
+  }, [update, user]);
 
   const onUpdate = () => {
     setUpdate((preVal) => preVal + 1);
@@ -39,7 +41,7 @@ function Home() {
             time={event.time}
             organizer={event.organizer}
             game={event.game}
-            attendees={event.attendees}
+            joined={event.joined}
           />
         </section>
       ))}
