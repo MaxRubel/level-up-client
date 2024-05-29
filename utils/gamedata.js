@@ -9,6 +9,18 @@ const getGames = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getSingleGame = (id) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/games/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => resolve(data))
+    .catch(reject);
+});
+
 const createGame = (payload) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/games`, {
     method: 'POST',
@@ -19,6 +31,18 @@ const createGame = (payload) => new Promise((resolve, reject) => {
   })
     .then((response) => response.json())
     .then((data) => resolve(data))
+    .catch(reject);
+});
+
+const updateGame = (payload) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/games/${payload.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(() => resolve())
     .catch(reject);
 });
 
@@ -40,4 +64,6 @@ const getGameTypes = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-export { getGames, createGame, getGameTypes };
+export {
+  getGames, createGame, getGameTypes, getSingleGame, updateGame,
+};
