@@ -28,11 +28,12 @@ const GameForm = ({ user, id, update }) => {
           title: data.title,
           maker: data.maker,
           gameTypeId: data.game_type.id,
+          id,
         });
       });
     }
     getGameTypes().then(setGameTypes);
-  }, []);
+  }, [id, update]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +53,6 @@ const GameForm = ({ user, id, update }) => {
     };
 
     if (!update) { createGame(game).then(() => router.push('/games')); } else {
-      game.id = id;
       updateGame(game).then(() => {
         router.push('/games');
       });
@@ -99,7 +99,7 @@ GameForm.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
-  id: PropTypes.string,
+  id: PropTypes.number,
   update: PropTypes.bool,
 };
 

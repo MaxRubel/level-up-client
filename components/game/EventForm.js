@@ -35,7 +35,7 @@ export default function EventForm({ update, id }) {
         });
       });
     }
-  }, []);
+  }, [id, update]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

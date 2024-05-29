@@ -7,5 +7,5 @@ export default function UpdateGameRoute() {
   const { id } = router.query;
   const { user } = useAuth();
 
-  return (<GameForm update user={user} id={id} />);
+  return (<GameForm update user={user} id={Number(id)} />);
 }
