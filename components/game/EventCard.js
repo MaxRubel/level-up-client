@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { deleteEvent } from '../../utils/eventData';
+import { deleteEvent, eventSignUp, leaveEvent } from '../../utils/eventData';
+import { useAuth } from '../../utils/context/authContext';
 
 export default function EventCard({
   id,
@@ -12,8 +13,11 @@ export default function EventCard({
   time,
   organizer,
   onUpdate,
+  attendees,
 }) {
   const router = useRouter();
+  const { user } = useAuth();
+
   const handleEdit = () => {
     router.push(`/events/update/${id}`);
   };
@@ -26,9 +30,33 @@ export default function EventCard({
     }
   };
 
+  const handleLeave = () => {
+    const payload = {
+      userId: user.id,
+    };
+    leaveEvent(id, payload).then(() => {
+      onUpdate();
+    });
+  };
+
+  const isAttending = attendees.some((item) => item.id === user.id);
+
+  const handleSignup = () => {
+    const payload = { userId: user.id };
+    eventSignUp(id, payload).then(() => {
+      onUpdate();
+    });
+  };
+
   return (
     <Card className="text-center" style={{ margin: '20px 0px' }}>
       <Card.Header>{description}</Card.Header>
+      <div>
+        {isAttending
+          ? <Button onClick={handleLeave} className="btn-danger">Leave</Button>
+          : <Button onClick={handleSignup}>Signup</Button>}
+
+      </div>
       <Card.Body>
         <Card.Title>By: {organizer.bio}</Card.Title>
         <Card.Text>Starting on {date}, at {time}</Card.Text>
@@ -59,5 +87,10 @@ EventCard.propTypes = {
   organizer: PropTypes.shape({
     bio: PropTypes.string.isRequired,
   }).isRequired,
+  attendees: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    uid: PropTypes.string.isRequired,
+    bio: PropTypes.string.isRequired,
+  })).isRequired,
   onUpdate: PropTypes.func.isRequired,
 };

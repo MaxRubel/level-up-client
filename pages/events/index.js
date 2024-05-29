@@ -39,6 +39,7 @@ function Home() {
             time={event.time}
             organizer={event.organizer}
             game={event.game}
+            attendees={event.attendees}
           />
         </section>
       ))}
