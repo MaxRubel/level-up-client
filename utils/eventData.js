@@ -1,9 +1,12 @@
 import { clientCredentials } from './client';
 
 const endpoint = clientCredentials.databaseURL;
-
-const getEvents = () => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/events`)
+const getEvents = (uid) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/events`, {
+    headers: {
+      Authorization: uid,
+    },
+  })
     .then((response) => response.json())
     .then(resolve)
     .catch(reject);

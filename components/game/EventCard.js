@@ -13,7 +13,7 @@ export default function EventCard({
   time,
   organizer,
   onUpdate,
-  attendees,
+  joined,
 }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -39,8 +39,6 @@ export default function EventCard({
     });
   };
 
-  const isAttending = attendees.some((item) => item.id === user.id);
-
   const handleSignup = () => {
     const payload = { userId: user.id };
     eventSignUp(id, payload).then(() => {
@@ -52,7 +50,7 @@ export default function EventCard({
     <Card className="text-center" style={{ margin: '20px 0px' }}>
       <Card.Header>{description}</Card.Header>
       <div>
-        {isAttending
+        {joined
           ? <Button onClick={handleLeave} className="btn-danger">Leave</Button>
           : <Button onClick={handleSignup}>Signup</Button>}
 
@@ -84,13 +82,9 @@ EventCard.propTypes = {
   description: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
+  joined: PropTypes.bool.isRequired,
   organizer: PropTypes.shape({
     bio: PropTypes.string.isRequired,
   }).isRequired,
-  attendees: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    uid: PropTypes.string.isRequired,
-    bio: PropTypes.string.isRequired,
-  })).isRequired,
   onUpdate: PropTypes.func.isRequired,
 };
