@@ -2,7 +2,9 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { createGame, getGameTypes } from '../../utils/gamedata';
+import {
+  createGame, getGameTypes, getSingleGame, updateGame,
+} from '../../utils/gamedata';
 
 const initialState = {
   skillLevel: 1,
@@ -12,12 +14,23 @@ const initialState = {
   gameTypeId: 0,
 };
 
-const GameForm = ({ user }) => {
+const GameForm = ({ user, id, update }) => {
   const [gameTypes, setGameTypes] = useState([]);
   const [currentGame, setCurrentGame] = useState(initialState);
   const router = useRouter();
 
   useEffect(() => {
+    if (update) {
+      getSingleGame(id).then((data) => {
+        setCurrentGame({
+          skillLevel: data.skill_level,
+          numberOfPlayers: data.number_of_players,
+          title: data.title,
+          maker: data.maker,
+          gameTypeId: data.game_type.id,
+        });
+      });
+    }
     getGameTypes().then(setGameTypes);
   }, []);
 
@@ -38,7 +51,12 @@ const GameForm = ({ user }) => {
       userId: user.uid,
     };
 
-    createGame(game).then(() => router.push('/games'));
+    if (!update) { createGame(game).then(() => router.push('/games')); } else {
+      game.id = id;
+      updateGame(game).then(() => {
+        router.push('/games');
+      });
+    }
   };
 
   return (
@@ -81,6 +99,13 @@ GameForm.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
+  id: PropTypes.string,
+  update: PropTypes.bool,
+};
+
+GameForm.defaultProps = {
+  id: null,
+  update: undefined,
 };
 
 export default GameForm;
