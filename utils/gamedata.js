@@ -21,11 +21,12 @@ const getSingleGame = (id) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const createGame = (payload) => new Promise((resolve, reject) => {
+const createGame = (payload, uid) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/games`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: uid,
     },
     body: JSON.stringify(payload),
   })
