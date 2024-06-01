@@ -52,7 +52,7 @@ const GameForm = ({ user, id, update }) => {
       userId: user.uid,
     };
 
-    if (!update) { createGame(game).then(() => router.push('/games')); } else {
+    if (!update) { createGame(game, user.uid).then(() => router.push('/games')); } else {
       updateGame(game).then(() => {
         router.push('/games');
       });
